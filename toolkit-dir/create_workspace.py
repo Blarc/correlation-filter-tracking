@@ -31,7 +31,7 @@ def create_workspace(workspace_path, dataset_name):
     temp_dataset_path = os.path.join(workspace_path, 'dataset_tmp.zip')
     
     print('Downloading dataset. This may take a while...')
-    urllib.request.urlretrieve(dataset_url, temp_dataset_path)
+    urllib.request.urlretrieve(dataset_url, temp_dataset_path, )
 
     dataset_dir = os.path.join(workspace_path, 'sequences')
     if not os.path.exists(dataset_dir):

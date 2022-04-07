@@ -7,7 +7,6 @@ from calculate_measures import tracking_analysis
 
 
 def tracking_comparison(workspace_path, tracker_ids, sensitivity, output_path):
-
     dataset = load_dataset(workspace_path)
 
     outputs_all = []
@@ -22,7 +21,7 @@ def tracking_comparison(workspace_path, tracker_ids, sensitivity, output_path):
             print_summary(output)
         else:
             output = tracking_analysis(workspace_path, tracker_id)
-        
+
         outputs_all.append(output)
 
     if output_path == '':
@@ -40,8 +39,9 @@ def main():
     parser.add_argument('--output_path', help='Path for the output image', default='', type=str)
 
     args = parser.parse_args()
-    
+
     tracking_comparison(args.workspace_path, args.trackers, args.sensitivity, args.output_path)
+
 
 if __name__ == "__main__":
     main()
