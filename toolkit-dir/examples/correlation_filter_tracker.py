@@ -8,15 +8,32 @@ from utils.tracker import Tracker
 
 
 class CorrelationFilterTracker(Tracker):
+    
+    def __init__(self, enlarge_factor=1, gaussian_sigma=4, filter_lambda=1, update_factor=0.1):
+        super().__init__()
 
+        self.enlarge_factor = enlarge_factor
+        self.gaussian_sigma = gaussian_sigma
+        self.filter_lambda = filter_lambda
+        self.update_factor = update_factor
+
+        self.search_window = None
+        self.ideal_gaussian = None
+        self.fft_ideal_gaussian = None
+        self.patch_size = None
+        
+        self.template = None
+        self.position = None
+        self.size = None
+        self.cosine_window = None
+        
+        self.filter_fft_conj = None
+    
     def name(self):
-        return "Corr"
+        return "CorrelationFilterTracker"
 
     def initialize(self, image, region):
-        self.enlarge_factor = 1.1  # best 1
-        self.gaussian_sigma = 2  # best 4
-        self.filter_lambda = 1  # best 1
-        self.update_factor = 0.1  # best 0.2
+
 
         if len(region) == 8:
             x_ = np.array(region[::2])
@@ -62,7 +79,7 @@ class CorrelationFilterTracker(Tracker):
         patch, _ = get_patch(image, self.position, self.patch_size)
         patch = np.multiply(patch, self.cosine_window)
 
-        # LOCALIZATION STEP
+        # Localization step
         patch_fft = fft2(patch)
 
         correlation_response = ifft2(
@@ -72,9 +89,10 @@ class CorrelationFilterTracker(Tracker):
             )
         )
 
-        # Returns maximum peak in correlation response
+        # Returns maximum (peak) in correlation response
         y_max, x_max = np.unravel_index(correlation_response.argmax(), correlation_response.shape)
-
+        
+        # Fix because Gaussian is inverted
         if x_max > patch.shape[0] / 2:
             x_max = x_max - patch.shape[0]
         if y_max > patch.shape[1] / 2:
@@ -85,7 +103,7 @@ class CorrelationFilterTracker(Tracker):
 
         self.position = (new_x, new_y)
 
-        # MODEL UPDATE
+        # Model update
         patch, _ = get_patch(image, self.position, self.patch_size)
         patch = np.multiply(patch, self.cosine_window)
         new_filter_fft_conj = self.construct_filter(patch)

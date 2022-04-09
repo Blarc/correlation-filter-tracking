@@ -75,6 +75,6 @@ def export_measures(workspace_path: str, dataset: Dataset, tracker: Tracker, ove
     with open(file_path, 'w') as f:
         json.dump(output, f, indent=2)
 
-    print_summary(output)
+    # print_summary(output)
 
     return output

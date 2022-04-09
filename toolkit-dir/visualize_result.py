@@ -1,7 +1,8 @@
 import argparse
 import os
 
-from utils.utils import load_tracker, load_dataset 
+from utils.utils import load_tracker
+from utils.dataset import load_dataset
 from utils.io_utils import read_regions
 
 

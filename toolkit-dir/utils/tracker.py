@@ -28,7 +28,7 @@ class Tracker(ABC):
 
         for sequence in dataset.sequences:
 
-            print('Evaluating on sequence:', sequence.name)
+            # print('Evaluating on sequence:', sequence.name)
 
             sequence_results_dir = os.path.join(results_dir, sequence.name)
             if not os.path.exists(sequence_results_dir):

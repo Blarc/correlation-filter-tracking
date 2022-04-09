@@ -32,3 +32,7 @@ class Dataset:
 
     def _load_sequence(self, sequence_name):
         return Sequence(self.sequences_dir, sequence_name)
+
+
+def load_dataset(workspace_path):
+    return Dataset(workspace_path)

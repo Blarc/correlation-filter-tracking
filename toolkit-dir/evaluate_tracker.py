@@ -3,11 +3,11 @@ import os
 import sys
 import yaml
 
-from utils.utils import load_tracker, load_dataset
+from utils.utils import load_tracker
+from utils.dataset import load_dataset
 
 
 def evaluate_tracker(workspace_path, tracker_id):
-
     tracker_class = load_tracker(workspace_path, tracker_id)
     tracker = tracker_class()
 
@@ -30,6 +30,7 @@ def main():
     args = parser.parse_args()
 
     evaluate_tracker(args.workspace_path, args.tracker)
+
 
 if __name__ == "__main__":
     main()

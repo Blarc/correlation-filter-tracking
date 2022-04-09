@@ -6,7 +6,7 @@ from utils.tracker import Tracker
 class NCCTracker(Tracker):
 
     def name(self):
-        return 'ncc'
+        return 'NCCTracker'
 
     def initialize(self, image, region):
         self.window = max(region[2], region[3]) * 2

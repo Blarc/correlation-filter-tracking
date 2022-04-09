@@ -5,9 +5,12 @@ import urllib.request
 import zipfile
 from shutil import copyfile
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 
 def create_workspace(workspace_path, dataset_name):
-    
     if not os.path.exists(workspace_path):
         print('Directory given as a workspace does not exist. Please create it meanually.')
         exit(-1)
@@ -29,7 +32,7 @@ def create_workspace(workspace_path, dataset_name):
         exit(-1)
 
     temp_dataset_path = os.path.join(workspace_path, 'dataset_tmp.zip')
-    
+
     print('Downloading dataset. This may take a while...')
     urllib.request.urlretrieve(dataset_url, temp_dataset_path, )
 
@@ -43,10 +46,10 @@ def create_workspace(workspace_path, dataset_name):
 
     # remove dataset .zip file
     os.remove(temp_dataset_path)
-    
+
     if not os.path.exists(os.path.join(workspace_path, 'results')):
         os.mkdir(os.path.join(workspace_path, 'results'))
-    
+
     # copy a template trackers.yaml file from utils to workspace directory
     copyfile('utils/trackers.yaml', os.path.join(workspace_path, 'trackers.yaml'))
 
@@ -57,11 +60,13 @@ def main():
     parser = argparse.ArgumentParser(description='Tracking Workspace Creation Utility')
 
     parser.add_argument("--workspace_path", help="Path to the VOT workspace", required=True, action='store')
-    parser.add_argument("--dataset", help="VOT dataset (vot2013/vot2014/vot2015/vot2016)", required=True, action='store')
+    parser.add_argument("--dataset", help="VOT dataset (vot2013/vot2014/vot2015/vot2016)", required=True,
+                        action='store')
 
     args = parser.parse_args()
 
     create_workspace(args.workspace_path, args.dataset)
+
 
 if __name__ == "__main__":
     main()
