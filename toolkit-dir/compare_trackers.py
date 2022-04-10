@@ -1,13 +1,12 @@
 import argparse
 import os
 
-from utils.utils import load_tracker, load_dataset
+from utils.utils import load_tracker
 from utils.export_utils import load_output, print_summary, export_plot
 from calculate_measures import tracking_analysis
 
 
 def tracking_comparison(workspace_path, tracker_ids, sensitivity, output_path):
-    dataset = load_dataset(workspace_path)
 
     outputs_all = []
     for tracker_id in tracker_ids:

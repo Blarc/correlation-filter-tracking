@@ -77,6 +77,20 @@ def average_time(times, regions):
     return time_sum / valid_frames
 
 
+def average_init_time(times, regions):
+    if len(times) != len(regions):
+        print('Error: Number of time measurements must be the same as regions.')
+        exit(-1)
+
+    time_sum = float(0)
+    valid_frames = 0
+    for t, reg in zip(times, regions):
+        if len(reg) == 1 and reg[0] == 1:
+            time_sum += t
+            valid_frames += 1
+
+    return time_sum / valid_frames
+
 def load_tracker(workspace_path, tracker_id):
     tracker_config = None
     with open(os.path.join(workspace_path, 'trackers.yaml'), 'r') as yfile:

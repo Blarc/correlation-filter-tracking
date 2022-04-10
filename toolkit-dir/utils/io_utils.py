@@ -1,5 +1,4 @@
 
-
 def read_regions(regions_path):
     with open(regions_path, 'r') as f:
         lines = f.readlines()

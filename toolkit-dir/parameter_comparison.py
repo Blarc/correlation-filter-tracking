@@ -70,14 +70,24 @@ def compare_update_factors():
     workspaces = ['../workspace-dir-vot13', '../workspace-dir-vot14']
     with open('results/update_factor_comparison.txt', 'w', encoding='UTF-8') as f:
         for update_factor in update_factors:
-            for workspace in workspaces:
+            print(f'\\multirow{{2}}{{*}}{{{update_factor}}}')
+            print(f'\\multirow{{2}}{{*}}{{{update_factor}}}', file=f)
+            for i, workspace in enumerate(workspaces):
                 output = evaluate_tracker(1, 4, 1, update_factor, workspace, f'update_factor_{update_factor}')
                 workspace_name = workspace.split('-')[2]
                 avg_overlap = output['average_overlap']
                 failures = output['total_failures']
                 fps = output['average_speed']
-                print(f'{update_factor} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline')
-                print(f'{update_factor} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline', file=f)
+                if i == len(workspaces) - 1:
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline')
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline',
+                          file=f)
+                else:
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}')
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}',
+                        file=f)
 
 
 def compare_sigmas():
@@ -85,30 +95,52 @@ def compare_sigmas():
     workspaces = ['../workspace-dir-vot13', '../workspace-dir-vot14']
     with open('results/sigma_comparison.txt', 'w', encoding='UTF-8') as f:
         for sigma in sigmas:
-            for workspace in workspaces:
+            print(f'\\multirow{{2}}{{*}}{{{sigma}}}')
+            print(f'\\multirow{{2}}{{*}}{{{sigma}}}', file=f)
+            for i, workspace in enumerate(workspaces):
                 output = evaluate_tracker(1, sigma, 1, 0.1, workspace, f'sigma_{sigma}')
                 workspace_name = workspace.split('-')[2]
                 avg_overlap = output['average_overlap']
                 failures = output['total_failures']
                 fps = output['average_speed']
-                print(f'{sigma} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline')
-                print(f'{sigma} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline', file=f)
+                if i == len(workspaces) - 1:
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline')
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline',
+                          file=f)
+                else:
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}')
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}',
+                        file=f)
 
 
-def compare_enlarge_factor():
+def compare_enlarge_factors():
     enlarge_factors = [1, 1.25, 1.5, 2, 3]
     workspaces = ['../workspace-dir-vot13', '../workspace-dir-vot14']
     with open('results/enlarge_factor_comparison.txt', 'w', encoding='UTF-8') as f:
         for enlarge_factor in enlarge_factors:
-            for workspace in workspaces:
+            print(f'\\multirow{{2}}{{*}}{{{enlarge_factor}}}')
+            print(f'\\multirow{{2}}{{*}}{{{enlarge_factor}}}', file=f)
+            for i, workspace in enumerate(workspaces):
                 output = evaluate_tracker(1, enlarge_factor, 1, 0.1, workspace, f'enlarge_factor_{enlarge_factor}')
                 workspace_name = workspace.split('-')[2]
                 avg_overlap = output['average_overlap']
                 failures = output['total_failures']
                 fps = output['average_speed']
-                print(f'{enlarge_factor} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline')
-                print(f'{enlarge_factor} & {workspace_name} & {avg_overlap} & {failures} & {fps} \\\\\n\\hline', file=f)
+                if i == len(workspaces) - 1:
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline')
+                    print(f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\hline',
+                          file=f)
+                else:
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}')
+                    print(
+                        f'& {workspace_name} & {round(avg_overlap, 2)} & {failures} & {round(fps)} \\\\\n\\cline{{2-5}}',
+                        file=f)
 
 
 if __name__ == '__main__':
-    compare_enlarge_factor()
+    compare_update_factors()
+    compare_sigmas()
+    compare_enlarge_factors()

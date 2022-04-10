@@ -15,7 +15,11 @@ def print_summary(output_dict):
     print('  Average overlap: %.2f' % output_dict['average_overlap'])
     print('  Total failures: %.1f' % output_dict['total_failures'])
     print('  Average speed: %.2f FPS' % output_dict['average_speed'])
+    print('  Average init speed: %.2f FPS' % output_dict['average_init_speed'])
     print('------------------------------------')
+    
+    for result in output_dict['results']:
+        print(f'{result["sequence_name"]} & {round(result["init_speed"])} & {round(result["speed"])} \\\\\n\\hline')
 
 def load_output(file_path):
     with open(file_path, 'r') as f:
@@ -46,25 +50,30 @@ def export_plot(outputs, sensitivity, output_path):
 
     print('The AR plot is saved to the file:', output_path)
 
-def export_measures(workspace_path: str, dataset: Dataset, tracker: Tracker, overlaps: list, failures: list, times: list):
+def export_measures(workspace_path: str, dataset: Dataset, tracker: Tracker, overlaps: list, failures: list, times: list, init_times: list):
     
     # create per-sequence output structure
     speed = len(dataset.sequences) * [0]
+    init_speed = len(dataset.sequences) * [0]
     results = len(dataset.sequences) * [0]
     for i, sequence in enumerate(dataset.sequences):
         speed_fps = 1.0 / times[i]
+        init_speed_fps = 1.0 / init_times[i]
         results[i] = {'sequence_name': sequence.name, 'sequence_length': sequence.length, \
-            'overlap': overlaps[i], 'failures': failures[i], 'speed': speed_fps}
+            'overlap': overlaps[i], 'failures': failures[i], 'speed': speed_fps, 'init_speed': init_speed_fps}
         speed[i] = speed_fps
+        init_speed[i] = init_speed_fps
 
     # average measures
     average_overlap = sum(overlaps) / len(dataset.sequences)
     total_failures = sum(failures)
     average_speed = sum(speed) / len(dataset.sequences)
+    average_init_speed = sum(init_speed) / len(dataset.sequences)
+    
 
     # final output structure with all information
     output = {'tracker_name': tracker.name(), 'results': results, 'average_overlap': average_overlap, \
-        'total_failures': total_failures, 'average_speed': average_speed, 'total_frames': dataset.number_frames}
+        'total_failures': total_failures, 'average_speed': average_speed, 'average_init_speed': average_init_speed, 'total_frames': dataset.number_frames}
 
     # create output directory and save output in json file
     output_dir = os.path.join(workspace_path, 'analysis', tracker.name())
